@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Expense</title>
+</head>
+<body>
+    <h2>Add Expense</h2>
+    <form th:action="@{/user_expenses/add}" method="post">
+        <label for="expenseDate">Date:</label>
+        <input type="text" id="expenseDate" name="expenseDate"><br>
+        
+        <label for="expenseValue">Value:</label>
+        <input type="text" id="expenseValue" name="expenseValue"><br>
+        
+        <label for="expenseCategory">Category:</label>
+        <select id="expenseCategory" name="expenseCategory">
+            <!-- Здесь можно использовать Thymeleaf для отображения списка категорий -->
+        </select><br>
+        
+        <button type="submit">Add Expense</button>
+    </form>
+</body>
+</html>
+

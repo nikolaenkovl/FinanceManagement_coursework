@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.8.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:component-scan base-package="com.mycompany"/>
+
+    <bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+
+    <security:http auto-config="true" use-expressions="false">
+        <security:form-login login-page="/login" login-processing-url="/login"
+             username-parameter="username"
+             password-parameter="password"
+             default-target-url="/FinanceManage/"
+             always-use-default-target="true"
+             authentication-failure-url="/login?error=true"/>
+
+        <security:logout logout-url="/logout" logout-success-url="/login?logout=true"/>
+
+        <security:intercept-url pattern="/user_incomes/**" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/user_expenses/**" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/diagram/**" access="ROLE_ADMIN"/>
+        <security:intercept-url pattern="/**" access="ROLE_ANONYMOUS, ROLE_USER, ROLE_ADMIN"/>
+    </security:http>
+
+    <security:authentication-manager>
+      <security:authentication-provider user-service-ref="сustomUserDetailsService"/>
+        <security:authentication-provider ref="customAuthenticationProvider"/>
+    </security:authentication-manager>
+
+</beans>

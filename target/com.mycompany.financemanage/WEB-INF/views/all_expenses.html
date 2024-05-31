@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" 
+      xmlns = "http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Finance Management</title>
+
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Y9DGiPz8MnqNKj+7v6cjn6tJu+IrRI6aA0Bqen3Mw8IQIY" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div th:replace="../views/header :: header"></div>
+
+
+<div class="container">
+    <h2 class="text-info">All expenses</h2>
+
+    <form action="#" th:action="@{/user_expenses/add_expense}" method="POST" class="form-inline mb-3">
+
+        <div class="form-group mr-2">
+            <label for="expenseDate">Date:</label>
+            <input type="text" class="form-control" id="expenseDate" name="expense_date"></input>
+        </div>
+        <div class="form-group mr-2">
+            <label for="expenseValue">Value:</label>
+            <input type="text" class="form-control" id="expenseValue" name="expense_value"></input>
+        </div>
+        <div class="form-group mr-2">
+            <label for="expenseCategory">Category:</label>
+            <select class="form-control" id="expenseCategory" name="expenseCategoryId">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Expense</button>
+    </form>
+
+    <h4 class="text-info">Balance: <span id="balance" th:text="${balance}"></span></h4>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Value</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="expense :${expenses}">
+                <td><a th:text="${expense.expense_date}"></a></td>
+                <td><a th:text="${expense.expense_value}"></a></td>
+                <td>
+                    <span th:each="category : ${categories}">
+                        <span th:if="${category.id == expense.user_category_id}" th:text="${category.name}"></span>
+                    </span>
+                </td>
+                
+                <td>
+                    <a th:href="@{/user_expenses/delete_expense(expense_id=${expense.id})}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<script>
+    $(document).ready(function() {
+        // Функция для получения баланса от сервера
+        function getBalance() {
+            $.ajax({
+                url: '/balance',
+                method: 'GET',
+                success: function(balance) {
+                    $('#balance').text(balance);
+                },
+                error: function() {
+                    console.log('Failed to fetch balance');
+                }
+            });
+        }
+
+        getBalance();
+    });
+</script>
+</div>
+</body>
+</html>
